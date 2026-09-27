@@ -1,0 +1,14 @@
+﻿replicaCount: 1
+image:
+  repositoryPrefix: docker.io/PBalabhadrakumar
+user:
+  tag: latest
+  port: 8001
+product:
+  tag: latest
+  port: 8002
+order:
+  tag: latest
+  port: 8003
+postgres:
+  password: "postgrespassword"
