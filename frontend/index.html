@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>NexusOps</title>
+<style>
+body{font-family:Segoe UI,Arial,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:30px}
+h1{margin:0 0 4px}p.s{color:#94a3b8;margin:0 0 24px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.c{background:#1e293b;border-radius:10px;padding:16px}
+input{width:100%;box-sizing:border-box;margin:6px 0;padding:8px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0}
+button{margin-top:6px;padding:8px 14px;border:0;border-radius:6px;background:#3b82f6;color:#fff;cursor:pointer}
+pre{background:#020617;padding:12px;border-radius:8px;overflow:auto;min-height:60px}
+.h{font-size:13px;color:#94a3b8}
+</style></head><body>
+<h1>NexusOps</h1><p class="s">Microservices demo: user, product and order services on Kubernetes</p>
+<div class="g">
+<div class="c"><h3>User Service</h3><input id="uid" type="number" value="1" placeholder="User ID">
+<button onclick="call('/api/users/'+v('uid'))">Get user</button></div>
+<div class="c"><h3>Product Service</h3><input id="pid" type="number" value="1" placeholder="Product ID">
+<button onclick="call('/api/products/'+v('pid'))">Get product</button></div>
+<div class="c"><h3>Order Service</h3>
+<input id="ouid" type="number" value="1" placeholder="User ID">
+<input id="opid" type="number" value="1" placeholder="Product ID">
+<input id="oqty" type="number" value="2" placeholder="Quantity">
+<button onclick="order()">Place order</button></div>
+</div>
+<h3>Response</h3><pre id="out">Click a button</pre>
+<p class="h">Served by: <span id="pod">-</span> | Requests sent: <span id="n">0</span></p>
+<button onclick="burst()">Send 100 requests (watch Grafana)</button>
+<script>
+var n=0;
+function v(i){return document.getElementById(i).value}
+function show(t){document.getElementById('out').textContent=t;document.getElementById('n').textContent=++n}
+async function call(u,o){try{var r=await fetch(u,o);var j=await r.json();show(r.status+' '+JSON.stringify(j,null,2))}catch(e){show('Error: '+e)}}
+function order(){call('/api/orders/?user_id='+v('ouid')+'&product_id='+v('opid')+'&quantity='+v('oqty'),{method:'POST'})}
+async function burst(){for(var i=0;i<100;i++){try{await fetch('/api/orders/?user_id=1&product_id=1&quantity=1',{method:'POST'});n++}catch(e){}}show('Sent 100 order requests')}
+</script></body></html>
