@@ -1,6 +1,6 @@
 ﻿replicaCount: 1
 image:
-  repositoryPrefix: docker.io/PBalabhadrakumar
+  repositoryPrefix: docker.io/pbalabhadrakumar
 user:
   tag: latest
   port: 8001
